@@ -4,21 +4,6 @@ const Button = ({ handleClick, text }) => {
   return <button onClick={handleClick}>{text}</button>;
 };
 
-// const Stats = ({ total, keys, items }) => {
-//   if (total === 0) {
-//     return <div>No feddback given</div>;
-//   }
-//   return <div>{items}</div>;
-// };
-
-// const Items = ({ text, value }) => {
-//   return (
-//     <div>
-//       {text} {value}
-//     </div>
-//   );
-// };
-
 const StatisticLine = ({ text, value }) => {
   return (
     <tbody>
