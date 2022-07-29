@@ -12,10 +12,13 @@ const App = () => {
   const [click, setClick] = useState(false);
   //state to set data after button is clicked
   const [dataButton, setDataButton] = useState("");
-
+  //state to set lat and long for the API endpoint
   const [coord, setCoord] = useState([]);
-
+  //state to allow temp to display
   const [showTemp, setShowTemp] = useState(false);
+
+  //let icon;
+
   //variable used to show data of one country when filtered
   let info = [];
 
@@ -38,33 +41,14 @@ const App = () => {
     });
   };
 
-  //const api_key = process.env.REACT_APP_API_KEY;
-
-  /* console.log(lat, long);
-
-  const weatherHook = () => {
-    axios
-      .get(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=a7526b9a59f0297faba369652c3ffcba`
-      )
-      .then((res) => setWeather(res.data));
-  }; */
-
   //state updates after fetched data
   useEffect(countriesHook, []);
-  /* //state updates after fetched data
-  useEffect(weatherHook, []);
-
-  console.log(weather); */
-
-  //const weatherData = weather.map((e) => console.log(e.current));
 
   //handles input change- gets target value and blocks button click feature
   const handleInputChange = (event) => {
     setSearch(event.target.value);
     setClick(false);
   };
-  //let [lat, long] = [];
 
   //function to display country's info in the page
   const button = (filtered) =>
@@ -94,11 +78,13 @@ const App = () => {
             border="1px solid black"
           />
           <h2>Weather in {e.capital}</h2>
-          <div></div>
+          {/* if temp data fetched, show data */}
+          {showTemp ? sunny() : <div></div>}
         </div>
       );
     });
 
+  //function that gets latitude
   const lat = (filtered) => {
     let a;
     filtered.map((e) => {
@@ -108,6 +94,7 @@ const App = () => {
     return a;
   };
 
+  //function that gets longitude
   const long = (filtered) => {
     let a;
     filtered.map((e) => {
@@ -124,18 +111,20 @@ const App = () => {
       (e) => e.name.common.toLowerCase() === event.target.value
     );
     //button was clicked, so show data for the country
-
     setClick(true);
     //display country's info
     setDataButton(button(filtered));
-    //setCoord(coordinates(filtered));
+    //set the lat and long for the API endpoint
     setCoord([lat(filtered), long(filtered)]);
   };
 
+  const api_key = process.env.REACT_APP_API_KEY;
+
+  //function to set the weather data
   const weatherHook = () => {
     axios
       .get(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${coord[0]}&lon=${coord[1]}&appid=a7526b9a59f0297faba369652c3ffcba&units=metric`
+        `https://api.openweathermap.org/data/2.5/weather?lat=${coord[0]}&lon=${coord[1]}&appid=${api_key}&units=metric`
       )
       .then((res) => {
         setWeather(res.data);
@@ -143,18 +132,18 @@ const App = () => {
       });
   };
 
+  //hook to set the weather data
   useEffect(weatherHook, [coord]);
 
-  //console.log(weather);
-
+  //function that gets and displays tempa and wind
   const sunny = () => {
-    //console.log(weather);
-    console.log(weather.main.temp);
+    let iconURL = `http://openweathermap.org/img/wn/${weather.icon}@2x.png`;
     return (
       <div>
         <ul>
-          <li>temperature: {weather.main.temp} Celsius</li>
-          <li>wind: {weather.wind.speed} m/s</li>
+          <li key="temp">temperature: {weather.main.temp} Celsius</li>
+          <img src={iconURL} alt="" />
+          <li key="wind">wind: {weather.wind.speed} m/s</li>
         </ul>
       </div>
     );
@@ -174,8 +163,6 @@ const App = () => {
     );
   });
 
-  //console.log(weather.main.temp);
-
   // conditional for button clicked or not - show filtered list or show country info of clicked button
   let show = click ? dataButton : filter;
 
@@ -191,7 +178,6 @@ const App = () => {
         : show}
 
       {button(info)}
-      {showTemp ? sunny() : <div></div>}
     </div>
   );
 };
