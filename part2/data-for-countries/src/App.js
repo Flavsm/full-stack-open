@@ -17,8 +17,6 @@ const App = () => {
   //state to allow temp to display
   const [showTemp, setShowTemp] = useState(false);
 
-  //let icon;
-
   //variable used to show data of one country when filtered
   let info = [];
 
@@ -54,8 +52,6 @@ const App = () => {
   const button = (filtered) =>
     filtered.map((e) => {
       let obj = e.languages;
-      /* let coordinates = e.capitalInfo;
-      [lat, long] = coordinates.latlng; */
       return (
         <div>
           <h1 key="name">{e.name.common}</h1>
@@ -63,9 +59,9 @@ const App = () => {
             <p key="capital">capital: {e.capital}</p>
             <p key="area">area: {e.area}</p>
           </div>
-          <div>
-            <h3>languages:</h3>
-            <ul>
+          <div key="div-2">
+            <h3 key='languages'>languages:</h3>
+            <ul key='list-of-languages'>
               {Object.values(obj).map((value) => (
                 <li key={value}>{value}</li>
               ))}
@@ -77,9 +73,9 @@ const App = () => {
             alt="country flag"
             border="1px solid black"
           />
-          <h2>Weather in {e.capital}</h2>
+          <h2 key='weather'>Weather in {e.capital}</h2>
           {/* if temp data fetched, show data */}
-          {showTemp ? sunny() : <div></div>}
+          {showTemp ? sunny() : <div key='div-3'></div>}
         </div>
       );
     });
@@ -118,8 +114,6 @@ const App = () => {
     setCoord([lat(filtered), long(filtered)]);
   };
 
-  //const api_key = process.env.REACT_APP_API_KEY;
-
   //function to set the weather data
   const weatherHook = () => {
     axios
@@ -137,12 +131,12 @@ const App = () => {
 
   //function that gets and displays tempa and wind
   const sunny = () => {
-    
+
     let icon = Object.values(weather.weather).map(e => e.icon)
     let iconURL = `http://openweathermap.org/img/wn/${icon}@2x.png`;
     return (
-      <div>
-        <ul>
+      <div key='div-4'>
+        <ul key='list-of-names'>
           <li key="temp">temperature: {weather.main.temp} Celsius</li>
           <img src={iconURL} alt="" key='icon' />
           <li key="wind">wind: {weather.wind.speed} m/s</li>
