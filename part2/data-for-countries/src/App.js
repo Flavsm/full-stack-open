@@ -135,7 +135,7 @@ const App = () => {
   const weatherHook = () => {
     axios
       .get(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${coord[0]}&lon=${coord[1]}&appid=a7526b9a59f0297faba369652c3ffcba&units=metric`
+        `https://api.openweathermap.org/data/2.5/weather?lat=${coord[0]}&lon=${coord[1]}&appid=${api_key}&units=metric`
       )
       .then((res) => {
         setWeather(res.data);
