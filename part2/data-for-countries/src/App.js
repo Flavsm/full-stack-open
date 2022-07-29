@@ -118,13 +118,13 @@ const App = () => {
     setCoord([lat(filtered), long(filtered)]);
   };
 
-  const api_key = process.env.REACT_APP_API_KEY;
+  //const api_key = process.env.REACT_APP_API_KEY;
 
   //function to set the weather data
   const weatherHook = () => {
     axios
       .get(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${coord[0]}&lon=${coord[1]}&appid=${api_key}&units=metric`
+        `https://api.openweathermap.org/data/2.5/weather?lat=${coord[0]}&lon=${coord[1]}&appid=${process.env.REACT_APP_API_KEY}&units=metric`
       )
       .then((res) => {
         setWeather(res.data);
@@ -137,12 +137,14 @@ const App = () => {
 
   //function that gets and displays tempa and wind
   const sunny = () => {
-    let iconURL = `http://openweathermap.org/img/wn/${weather.icon}@2x.png`;
+    
+    let icon = Object.values(weather.weather).map(e => e.icon)
+    let iconURL = `http://openweathermap.org/img/wn/${icon}@2x.png`;
     return (
       <div>
         <ul>
           <li key="temp">temperature: {weather.main.temp} Celsius</li>
-          <img src={iconURL} alt="" />
+          <img src={iconURL} alt="" key='icon' />
           <li key="wind">wind: {weather.wind.speed} m/s</li>
         </ul>
       </div>
@@ -155,7 +157,7 @@ const App = () => {
       <div>
         <li key={e}>
           {e}{" "}
-          <button key={e + 1} value={e.toLowerCase()} onClick={handleClick}>
+          <button value={e.toLowerCase()} onClick={handleClick}>
             show
           </button>
         </li>
